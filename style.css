@@ -27,6 +27,15 @@ body {
   overflow: hidden;
 }
 
+.sci {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.sci button { height: 48px; font-size: 20px; background: #1f3a5f; }
+
 .keys {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

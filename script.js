@@ -7,6 +7,14 @@ const operations = {
   '÷': (a, b) => a / b,
 };
 
+// Engineering functions applied to the number currently shown.
+// null means the input is outside the function's domain.
+const functions = {
+  sqrt: (x) => (x < 0 ? null : Math.sqrt(x)),
+  square: (x) => x * x,
+  sin: (x) => Math.sin((x * Math.PI) / 180), // degrees
+};
+
 const display = document.getElementById('display');
 
 let current = '0';   // number being typed (string)
@@ -69,6 +77,19 @@ function inputOperator(op) {
   fresh = true;
 }
 
+function applyFunction(name) {
+  if (error) return;
+  const result = functions[name](Number(current));
+  if (result === null || !Number.isFinite(result)) {
+    showError();
+    return;
+  }
+  // Trim float noise: sin(180°) is 1.2e-16 in floating point, not 0.
+  const rounded = Math.abs(result) < 1e-12 ? 0 : Number(result.toPrecision(10));
+  current = String(rounded).length > MAX_DIGITS ? rounded.toExponential(6) : String(rounded);
+  fresh = true;
+}
+
 function equals() {
   if (error || operator === null) return;
   if (!compute()) return;
@@ -77,12 +98,13 @@ function equals() {
   fresh = true;
 }
 
-document.querySelector('.keys').addEventListener('click', (e) => {
+document.querySelector('.calc').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
 
   if (btn.dataset.num !== undefined) inputDigit(btn.dataset.num);
   else if (btn.dataset.op !== undefined) inputOperator(btn.dataset.op);
+  else if (btn.dataset.fn !== undefined) applyFunction(btn.dataset.fn);
   else if (btn.dataset.action === 'equals') equals();
   else if (btn.dataset.action === 'clear') reset();
 
