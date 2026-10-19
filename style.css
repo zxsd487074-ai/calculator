@@ -47,7 +47,7 @@ button {
 button:active { filter: brightness(1.3); }
 
 .fn { background: #a5a5a5; color: #000; }
-.op { background: #ff9f0a; }
-.eq { background: #ff9f0a; }
+.op { background: #30d158; }
+.eq { background: #30d158; }
 .tall { grid-row: span 2; height: auto; }
 .wide { grid-column: span 3; }
